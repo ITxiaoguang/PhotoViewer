@@ -1,1 +1,1 @@
-include ':app', ':Transferee', ':GlideImageLoader', ':UniversalImageLoader', ':PicassoImageLoader'
+include ':app', ':photoviewer', ':glideimageloader', ':universalimageloader', ':picassoimageloader'

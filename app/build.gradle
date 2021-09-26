@@ -38,10 +38,10 @@ android {
 }
 
 dependencies {
-    implementation project(':Transferee')
-    implementation project(':GlideImageLoader')
-    implementation project(':UniversalImageLoader')
-    implementation project(':PicassoImageLoader')
+    implementation project(':photoviewer')
+    implementation project(':glideimageloader')
+    implementation project(':universalimageloader')
+    implementation project(':picassoimageloader')
 
     implementation libAppcompat
     implementation libConstraintLayout
