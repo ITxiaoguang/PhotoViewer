@@ -1,0 +1,61 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        google()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.1.3"
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        mavenCentral()
+        google()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+project.ext {
+    compileSdkVersion = 29
+    buildToolsVersion = "29.0.2"
+
+    applicationId = "com.xiaoguang.widget"
+    minSdkVersion = 17
+    targetSdkVersion = 29
+    versionCode = 1
+    versionName = "1.0.0"
+
+    abortOnLintError = false
+    checkLintRelease = false
+    useJack = false
+    abortOnLintError = false
+    javaVersion = JavaVersion.VERSION_1_8
+
+    /** 第三方库版本管理 **/
+    libConstraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
+    libSupportDesign = "com.android.support:design:27.1.1"
+    libUtilCodex = "com.blankj:utilcodex:1.26.0"
+    libGlide = "com.github.bumptech.glide:glide:4.11.0"
+    libPicasso = "com.squareup.picasso:picasso:2.71828"
+    libUniversal = "com.nostra13.universalimageloader:universal-image-loader:1.9.5"
+    libBaseAdapter = "com.zhy:base-adapter:3.0.3"
+    libRecyclerviewAdpater = "com.zhy:base-rvadapter:3.0.3"
+    libImmersionbar = "com.gyf.immersionbar:immersionbar:3.0.0"
+    libLeakcanary = "com.squareup.leakcanary:leakcanary-android:2.3"
+    // Transferee 核心库所依赖项目
+    libAppcompat = "androidx.appcompat:appcompat:1.1.0"
+    libSupportRecyclerview = "androidx.recyclerview:recyclerview:1.0.0"
+    libExoplayer = "com.google.android.exoplayer:exoplayer:2.10.4"
+    libExoExtensionRtmp = "com.google.android.exoplayer:extension-rtmp:2.10.4"
+    libProgresspieview = "com.github.filippudak.progresspieview:library:1.0.4"
+    libGifDrawable = "pl.droidsonroids.gif:android-gif-drawable:1.2.19"
+//    libImmersionbar = "com.gyf.immersionbar:immersionbar:3.0.0"
+    libLuban = "top.zibin:Luban:1.1.8"
+}

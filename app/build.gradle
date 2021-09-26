@@ -1,0 +1,57 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    defaultConfig {
+        applicationId rootProject.ext.applicationId
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    signingConfigs {
+        Android_Sign {
+            storeFile file("$rootDir/transfer.jks")
+            keyAlias "vans"
+            keyPassword "123456"
+            storePassword "123456"
+        }
+    }
+    buildTypes {
+        release {
+            debuggable false
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.Android_Sign
+            buildConfigField "boolean", "ENABLE_DEBUG", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation project(':Transferee')
+    implementation project(':GlideImageLoader')
+    implementation project(':UniversalImageLoader')
+    implementation project(':PicassoImageLoader')
+
+    implementation libAppcompat
+    implementation libConstraintLayout
+    implementation libSupportDesign
+    implementation libBaseAdapter
+    implementation libRecyclerviewAdpater
+    implementation libUtilCodex
+    implementation libUniversal
+    implementation libGlide
+    implementation libPicasso
+    implementation libImmersionbar
+    debugImplementation libLeakcanary
+}
