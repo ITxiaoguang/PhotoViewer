@@ -1,3 +1,6 @@
+# PhotoViewer
+PhotoViewer 一款功能超强的相册查看器。An awesome photo album viewer.
+
 # Transferee [![](https://jitpack.io/v/Hitomis/transferee.svg)](https://jitpack.io/#Hitomis/transferee)
 transferee 可以帮助你完成从缩略视图到原视图的无缝过渡转变, 优雅的浏览普通图片、长图、gif图、视频等不同格式的多媒体。
 
@@ -15,6 +18,17 @@ transferee 可以帮助你完成从缩略视图到原视图的无缝过渡转变
 + 缩略图到大图或者大图到缩略图的无缝过渡动画，无缩略图信息时，自动改变动画的行为为平移过渡->加载大图->伸展图片动画
 + 支持傻瓜式绑定 RecyclerView / ListView / GridView / ImageView
 + 支持不绑定任何 View, 即可启动 transferee
+
+todo:
++ 支持下载图片、视频、动态图
++ 支持自定义布局
++ 支持区分图片、视频、gif类型
++ 支持得到当前页图片的bitmap
++ 更友好的视频播放器
+
+拓展:
++ 支持图片多个二维码扫码
++ 播放视频时各种拓展，如：弹幕、倍数播放、画中画
 
 如有任何问题欢迎提 Issues
 
