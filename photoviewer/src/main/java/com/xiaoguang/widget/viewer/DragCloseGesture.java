@@ -1,5 +1,8 @@
 package com.xiaoguang.widget.viewer;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.widget.ImageView.ScaleType.FIT_CENTER;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -18,8 +21,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.xiaoguang.widget.view.image.TransferImage;
 import com.xiaoguang.widget.view.video.ExoVideoView;
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.widget.ImageView.ScaleType.FIT_CENTER;
+import java.util.List;
 
 /**
  * Created by Vans Z on 2019-11-05.
@@ -123,8 +125,12 @@ class DragCloseGesture {
                 if (velocityY > 100) {
                     int pos = transferLayout.getTransConfig().getNowThumbnailIndex();
                     ImageView originImage = null;
-                    if (!transferLayout.getTransConfig().getOriginImageList().isEmpty()) {
-                        originImage = transferLayout.getTransConfig().getOriginImageList().get(pos);
+                    List<ImageView> imageViewList = transferLayout.getTransConfig().getOriginImageList();
+                    if (!imageViewList.isEmpty()) {
+                        // FIX BUG 多布局情况下数组越界
+                        if (imageViewList.size() > pos) {
+                            originImage = transferLayout.getTransConfig().getOriginImageList().get(pos);
+                        }
                     }
                     if (originImage == null) { // 走扩散消失动画
                         transferLayout.diffusionTransfer(pos);

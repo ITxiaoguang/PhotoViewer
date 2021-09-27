@@ -1,5 +1,7 @@
 package com.xiaoguang.widget.viewer;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -24,8 +26,6 @@ import com.xiaoguang.widget.view.video.ExoVideoView;
 import java.util.HashSet;
 import java.util.Set;
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-
 /**
  * PhotoViewer 中 Dialog 显示的内容
  * <p>
@@ -38,8 +38,8 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 class TransferLayout extends FrameLayout {
     private Context context;
 
-    private TransferConfig transConfig;
-    private DragCloseGesture dragCloseGesture;
+    private com.xiaoguang.widget.viewer.TransferConfig transConfig;
+    private com.xiaoguang.widget.viewer.DragCloseGesture dragCloseGesture;
 
     private TransferChangeListener transChangeListener;
     private OnLayoutResetListener layoutResetListener;
@@ -65,7 +65,7 @@ class TransferLayout extends FrameLayout {
     /**
      * 拖拽开始和未满足拖拽返回执行的rollBack回调
      */
-    private DragCloseGesture.DragCloseListener dragCloseListener = new DragCloseGesture.DragCloseListener() {
+    private com.xiaoguang.widget.viewer.DragCloseGesture.DragCloseListener dragCloseListener = new com.xiaoguang.widget.viewer.DragCloseGesture.DragCloseListener() {
         @Override
         public void onDragStar() {
             if (transConfig.isEnableDragHide()) {
@@ -316,7 +316,7 @@ class TransferLayout extends FrameLayout {
         transViewPager.removeOnPageChangeListener(transChangeListener);
     }
 
-    TransferConfig getTransConfig() {
+    com.xiaoguang.widget.viewer.TransferConfig getTransConfig() {
         return transConfig;
     }
 
@@ -385,6 +385,7 @@ class TransferLayout extends FrameLayout {
             transViewPager.setVisibility(View.INVISIBLE);
 
         hideIndexIndicator();
+        hideCustomView();
         return true;
     }
 
@@ -471,7 +472,7 @@ class TransferLayout extends FrameLayout {
      *
      * @param config 参数对象
      */
-    void apply(TransferConfig config) {
+    void apply(com.xiaoguang.widget.viewer.TransferConfig config) {
         transConfig = config;
         if (transChangeListener == null) {
             transChangeListener = new TransferChangeListener(this, transConfig);
@@ -479,7 +480,7 @@ class TransferLayout extends FrameLayout {
             transChangeListener.updateConfig(transConfig);
         }
         if (transConfig.isEnableDragClose())
-            this.dragCloseGesture = new DragCloseGesture(this, dragCloseListener);
+            this.dragCloseGesture = new com.xiaoguang.widget.viewer.DragCloseGesture(this, dragCloseListener);
     }
 
     /**

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * FIX BUG 这里运用 recyclerView 的在长列表且多布局 没算对
+ * <p>
  * Created by Vans Z on 2020/5/22.
  */
 class OriginalViewHelper {
@@ -30,9 +32,14 @@ class OriginalViewHelper {
 
     void fillOriginImages(TransferConfig config) {
         transConfig = config;
+        // FIX BUG 多布局情况下数组越界
         List<ImageView> originImageList = new ArrayList<>();
         if (transConfig.getRecyclerView() != null) {
-            fillByRecyclerView(originImageList);
+            if (null != transConfig.getTargetImageView()) {
+                fillBySource(originImageList);
+            } else {
+                fillByRecyclerView(originImageList);
+            }
         } else if (transConfig.getListView() != null) {
             fillByListView(originImageList);
         } else if (transConfig.getImageView() != null) {
@@ -43,6 +50,35 @@ class OriginalViewHelper {
             }
         }
         transConfig.setOriginImageList(originImageList);
+    }
+
+    /**
+     * FIX BUG 多布局情况下，计算list出错的问题
+     */
+    private List<ImageView> fillBySource(final List<ImageView> originImageList) {
+        RecyclerView recyclerView = transConfig.getRecyclerView();
+        int childCount = recyclerView.getChildCount();
+        int targetViewIndex = 0;
+        int imageSize = 0;
+        for (int i = 0; i < childCount; i++) {
+            ImageView originImage = recyclerView.getChildAt(i)
+                    .findViewById(transConfig.getTargetImageView().getId());
+            if (originImage != null) {
+                ++imageSize;
+                if (transConfig.getTargetImageView() == originImage) {// 两个view的内存也相等
+                    targetViewIndex = imageSize;
+                }
+                originImageList.add(originImage);
+            }
+        }
+
+        int totalCount = transConfig.getSourceUrlList().size();
+        int firstPos = transConfig.getNowThumbnailIndex() + 1 - targetViewIndex;
+        int lastPos = transConfig.getNowThumbnailIndex() + 1 + (originImageList.size() - targetViewIndex);
+
+        fillPlaceHolder(originImageList, totalCount, firstPos, lastPos);
+
+        return originImageList;
     }
 
     private void fillByRecyclerView(final List<ImageView> originImageList) {
@@ -59,6 +95,7 @@ class OriginalViewHelper {
 
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         int firstPos = 0, lastPos = 0;
+        // todo 这里算不对，没有把多布局过滤，需重做
         int totalCount = layoutManager.getItemCount() - headerSize - footerSize;
         if (layoutManager instanceof LinearLayoutManager) {
             LinearLayoutManager linLayMan = (LinearLayoutManager) layoutManager;

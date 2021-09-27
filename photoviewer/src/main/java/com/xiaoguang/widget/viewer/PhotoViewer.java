@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AlertDialog;
 
 import com.gyf.immersionbar.ImmersionBar;
-import com.xiaoguang.widget.style.index.CircleIndexIndicator;
 import com.xiaoguang.widget.style.progress.ProgressBarIndicator;
 import com.xiaoguang.widget.utils.AppManager;
 import com.xiaoguang.widget.utils.FileUtils;
@@ -93,13 +92,14 @@ public class PhotoViewer implements DialogInterface.OnShowListener,
 
         transConfig.setNowThumbnailIndex(Math.max(transConfig.getNowThumbnailIndex(), 0));
         transConfig.setOffscreenPageLimit(transConfig.getOffscreenPageLimit() <= 0
-                ? 1 : transConfig.getOffscreenPageLimit());
+                ? 2 : transConfig.getOffscreenPageLimit());
         transConfig.setDuration(transConfig.getDuration() <= 0
                 ? 300 : transConfig.getDuration());
         transConfig.setProgressIndicator(transConfig.getProgressIndicator() == null
                 ? new ProgressBarIndicator() : transConfig.getProgressIndicator());
-        transConfig.setIndexIndicator(transConfig.getIndexIndicator() == null
-                ? new CircleIndexIndicator() : transConfig.getIndexIndicator());
+//        transConfig.setIndexIndicator(transConfig.getIndexIndicator() == null
+//                ? new CircleIndexIndicator() : transConfig.getIndexIndicator());
+        transConfig.setIndexIndicator(transConfig.getIndexIndicator());
     }
 
     /**
@@ -111,7 +111,7 @@ public class PhotoViewer implements DialogInterface.OnShowListener,
     public PhotoViewer apply(TransferConfig config) {
         if (!shown) {
             transConfig = config;
-            OriginalViewHelper.getInstance().fillOriginImages(config);
+            com.xiaoguang.widget.viewer.OriginalViewHelper.getInstance().fillOriginImages(config);
             checkConfig();
             transLayout.apply(config);
         }
@@ -270,7 +270,7 @@ public class PhotoViewer implements DialogInterface.OnShowListener,
     }
 
     public interface OnPhotoViewerLongClickListener {
-        void onLongClick(ImageView imageView, String imageUri, int pos);
+        void onLongClick(ImageView targetImage, String imageUri, int pos);
     }
 
 }

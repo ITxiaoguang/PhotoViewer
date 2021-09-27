@@ -59,6 +59,7 @@ public final class TransferConfig {
     private ImageView imageView;
     private AbsListView listView;
     private RecyclerView recyclerView;
+    private ImageView targetImageView;
     private View customView;
 
     private int headerSize;
@@ -244,11 +245,11 @@ public final class TransferConfig {
         this.imageLoader = imageLoader;
     }
 
-    public PhotoViewer.OnPhotoViewerLongClickListener getLongClickListener() {
+    public com.xiaoguang.widget.viewer.PhotoViewer.OnPhotoViewerLongClickListener getLongClickListener() {
         return longClickListener;
     }
 
-    public void setLongClickListener(PhotoViewer.OnPhotoViewerLongClickListener longClickListener) {
+    public void setLongClickListener(com.xiaoguang.widget.viewer.PhotoViewer.OnPhotoViewerLongClickListener longClickListener) {
         this.longClickListener = longClickListener;
     }
 
@@ -264,10 +265,12 @@ public final class TransferConfig {
 
     /**
      * 判断当前 position 下的资源是不是视频
+     * FIXME 判断视频不友好
      *
      * @param position 为 -1 值，表示取 nowThumbnailIndex
      * @return true : 是视频资源
      */
+    @Deprecated
     public boolean isVideoSource(int position) {
         String sourceUrl = sourceUrlList.get(position == -1 ? nowThumbnailIndex : position);
         return VIDEO_PATTERN.matcher(sourceUrl).matches();
@@ -303,6 +306,14 @@ public final class TransferConfig {
 
     public void setRecyclerView(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
+    }
+
+    public ImageView getTargetImageView() {
+        return targetImageView;
+    }
+
+    public void setTargetImageView(ImageView targetImageView) {
+        this.targetImageView = targetImageView;
     }
 
     public View getCustomView() {
@@ -371,16 +382,16 @@ public final class TransferConfig {
         private ImageLoader imageLoader;
         private View customView;
 
-        private @IdRes
-        int imageId;
+        private @IdRes int imageId;
         private ImageView imageView;
         private AbsListView listView;
         private RecyclerView recyclerView;
+        private ImageView targetImageView;// 目标ImageView
 
         private int headerSize;
         private int footerSize;
 
-        private PhotoViewer.OnPhotoViewerLongClickListener longClickListener;
+        private com.xiaoguang.widget.viewer.PhotoViewer.OnPhotoViewerLongClickListener longClickListener;
 
         /**
          * 当前缩略图在所有图片中的索引
@@ -546,7 +557,7 @@ public final class TransferConfig {
         }
 
         /**
-         * 图片索引指示器 (默认内置 IndexCircleIndicator), 可自实现
+         * 图片索引指示器 (默认 无索引), 可自实现
          * IIndexIndicator 接口定义自己的图片索引指示器
          */
         public Builder setIndexIndicator(IIndexIndicator indexIndicator) {
@@ -566,7 +577,7 @@ public final class TransferConfig {
         /**
          * 绑定 photoViewer 长按操作监听器
          */
-        public Builder setOnLongClickListener(PhotoViewer.OnPhotoViewerLongClickListener listener) {
+        public Builder setOnLongClickListener(com.xiaoguang.widget.viewer.PhotoViewer.OnPhotoViewerLongClickListener listener) {
             this.longClickListener = listener;
             return this;
         }
@@ -608,9 +619,21 @@ public final class TransferConfig {
          *
          * @param imageId item layout 中的 ImageView Resource ID
          */
+        @Deprecated
         public TransferConfig bindRecyclerView(RecyclerView recyclerView, int imageId) {
             this.recyclerView = recyclerView;
             this.imageId = imageId;
+            return create();
+        }
+
+        /**
+         * 绑定 RecyclerView
+         *
+         * @param targetImageView item layout 中的 ImageView
+         */
+        public TransferConfig bindRecyclerView(RecyclerView recyclerView, ImageView targetImageView) {
+            this.recyclerView = recyclerView;
+            this.targetImageView = targetImageView;
             return create();
         }
 
@@ -677,6 +700,7 @@ public final class TransferConfig {
             config.setImageView(imageView);
             config.setListView(listView);
             config.setRecyclerView(recyclerView);
+            config.setTargetImageView(targetImageView);
             config.setHeaderSize(headerSize);
             config.setFooterSize(footerSize);
 
