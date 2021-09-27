@@ -62,7 +62,7 @@ public class PicassoImageLoader implements ImageLoader {
     public void loadSource(final String imageUrl, final SourceCallback callback) {
         callbackMap.put(imageUrl, callback);
         // 因为 picasso 不支持 gif 图显示，也不支持 download 或者 asFile 操作。
-        // 所以如果是 gif 图片,暂时直接使用 OkHttp3 下载之后回传给 Transferee 渲染
+        // 所以如果是 gif 图片,暂时直接使用 OkHttp3 下载之后回传给 PhotoViewer 渲染
         if (imageUrl.endsWith(".gif")) {
             loadGif(imageUrl, callback);
         } else {
@@ -139,7 +139,7 @@ public class PicassoImageLoader implements ImageLoader {
                     callbackMap.remove(imageUrl);
                     return;
                 }
-                // 主线程通知 transferee 渲染 gif 图片
+                // 主线程通知 photoViewer 渲染 gif 图片
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {

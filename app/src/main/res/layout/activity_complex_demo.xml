@@ -20,7 +20,7 @@
             android:textColor="#888" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_transferee"
+            android:id="@+id/rv_photoViewer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -34,11 +34,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:text="使用了 GridView 作为载体，加载一般图片、长图、动态 gif 图、视频等资源，使用 Glide 作为图片加载器。GridView 高度80dp，并开启了跟随 transferee 滑动功能，演示了对于未完全展开的列表, transferee 个性化处理方式："
+            android:text="使用了 GridView 作为载体，加载一般图片、长图、动态 gif 图、视频等资源，使用 Glide 作为图片加载器。GridView 高度80dp，并开启了跟随 photoViewer 滑动功能，演示了对于未完全展开的列表, photoViewer 个性化处理方式："
             android:textColor="#888" />
 
         <GridView
-            android:id="@+id/gv_transferee"
+            android:id="@+id/gv_photoViewer"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:gravity="center"
@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:text="无需绑定，即可使用，并指定了显示指定位置的页面参数 nowThumbnailIndex，使用场景例如 WebView 中，无法获取缩略图的时候，或者只是单纯的想使用 transferee 去预览一组多媒体文件"
+            android:text="无需绑定，即可使用，并指定了显示指定位置的页面参数 nowThumbnailIndex，使用场景例如 WebView 中，无法获取缩略图的时候，或者只是单纯的想使用 photoViewer 去预览一组多媒体文件"
             android:textColor="#888" />
 
         <Button

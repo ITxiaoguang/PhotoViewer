@@ -146,7 +146,7 @@ public class SourceConfig {
         hideThumbList.add("https://c-ssl.duitang.com/uploads/item/201703/25/20170325113119_EBM3n.thumb.1000_0.jpeg");
         hideThumbList.add("https://c-ssl.duitang.com/uploads/item/201703/25/20170325113114_JZasz.thumb.700_0.jpeg");
         hideThumbList.add("https://c-ssl.duitang.com/uploads/item/201707/16/20170716205424_ZcnXN.thumb.1000_0.jpeg");
-        friendsCircleList.add(new Pair<>("当 enableHideThumb = false 时，表示 transferee 打开或关闭不会干扰原缩略图的显示隐藏，默认开启", hideThumbList));
+        friendsCircleList.add(new Pair<>("当 enableHideThumb = false 时，表示 photoViewer 打开或关闭不会干扰原缩略图的显示隐藏，默认开启", hideThumbList));
 
         List<String> justLoadHitList = new ArrayList<>();
         justLoadHitList.add("https://c-ssl.duitang.com/uploads/item/201411/10/20141110213800_Arhdr.thumb.1000_0.gif");

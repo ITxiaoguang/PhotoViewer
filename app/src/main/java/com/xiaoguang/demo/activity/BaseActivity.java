@@ -13,8 +13,8 @@ import androidx.core.content.ContextCompat;
 
 import com.blankj.utilcode.util.FileUtils;
 import com.gyf.immersionbar.ImmersionBar;
-import com.xiaoguang.widget.transfer.TransferConfig;
-import com.xiaoguang.widget.transfer.Transferee;
+import com.xiaoguang.widget.viewer.TransferConfig;
+import com.xiaoguang.widget.viewer.PhotoViewer;
 import com.xiaoguang.demo.R;
 
 import java.io.File;
@@ -28,7 +28,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected static final int READ_EXTERNAL_STORAGE = 100;
     protected static final int WRITE_EXTERNAL_STORAGE = 101;
 
-    protected Transferee transferee;
+    protected PhotoViewer photoViewer;
     protected TransferConfig config;
     protected GridView gvImages;
 
@@ -37,16 +37,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // 修改状态栏颜色
         ImmersionBar.with(this).statusBarColor(R.color.colorPrimary).init();
-        transferee = Transferee.getDefault(this);
+        photoViewer = PhotoViewer.getDefault(this);
         setContentView(getContentView());
         initView();
-        testTransferee();
+        testPhotoViewer();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        transferee.destroy();
+        photoViewer.destroy();
     }
 
     @Override
@@ -79,7 +79,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 mkFlag = rootFile.mkdirs();
             }
             if (mkFlag) {
-                File imageFile = transferee.getImageFile(imageUri);
+                File imageFile = photoViewer.getImageFile(imageUri);
                 boolean success = FileUtils.copy(imageFile, new File(rootFile, imageName));
                 if (success)
                     Toast.makeText(this, "Save file success", Toast.LENGTH_SHORT).show();
@@ -91,6 +91,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract void initView();
 
-    protected abstract void testTransferee();
+    protected abstract void testPhotoViewer();
 
 }

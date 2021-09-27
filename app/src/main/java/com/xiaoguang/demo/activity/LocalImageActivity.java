@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.xiaoguang.widget.style.index.NumberIndexIndicator;
 import com.xiaoguang.widget.style.progress.ProgressBarIndicator;
-import com.xiaoguang.widget.transfer.TransferConfig;
+import com.xiaoguang.widget.viewer.TransferConfig;
 import com.core.glideimageloader.GlideImageLoader;
 import com.xiaoguang.demo.R;
 import com.xiaoguang.demo.SourceConfig;
@@ -38,7 +38,7 @@ public class LocalImageActivity extends BaseActivity {
     }
 
     @Override
-    protected void testTransferee() {
+    protected void testPhotoViewer() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{
                             Manifest.permission.READ_EXTERNAL_STORAGE},
@@ -46,13 +46,13 @@ public class LocalImageActivity extends BaseActivity {
         } else {
             images = SourceConfig.getLatestPhotoPaths(this, 99);
             if (images != null && !images.isEmpty()) {
-                initTransfereeConfig();
+                initPhotoViewerConfig();
                 gvImages.setAdapter(new NineGridAdapter());
             }
         }
     }
 
-    private void initTransfereeConfig() {
+    private void initPhotoViewerConfig() {
         config = TransferConfig.build()
                 .setSourceUrlList(images)
                 .setMissPlaceHolder(R.mipmap.ic_empty_photo)
@@ -69,7 +69,7 @@ public class LocalImageActivity extends BaseActivity {
         if (requestCode == READ_EXTERNAL_STORAGE) {
             images = SourceConfig.getLatestPhotoPaths(this, 99);
             if (images != null && !images.isEmpty()) {
-                initTransfereeConfig();
+                initPhotoViewerConfig();
                 gvImages.setAdapter(new NineGridAdapter());
             }
         } else {
@@ -94,7 +94,7 @@ public class LocalImageActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     config.setNowThumbnailIndex(position);
-                    transferee.apply(config).show();
+                    photoViewer.apply(config).show();
                 }
             });
         }

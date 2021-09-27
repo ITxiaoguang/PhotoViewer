@@ -18,7 +18,7 @@ android {
     }
     signingConfigs {
         Android_Sign {
-            storeFile file("$rootDir/transfer.jks")
+            storeFile file("$rootDir/viewer.jks")
             keyAlias "vans"
             keyPassword "123456"
             storePassword "123456"

@@ -1,4 +1,4 @@
-package com.xiaoguang.widget.transfer;
+package com.xiaoguang.widget.viewer;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * Transferee Attributes
+ * PhotoViewer Attributes
  * <p>
  * Created by Vans Z on 2017/1/19.
  * <p>
@@ -64,7 +64,7 @@ public final class TransferConfig {
     private int headerSize;
     private int footerSize;
 
-    private Transferee.OnTransfereeLongClickListener longClickListener;
+    private PhotoViewer.OnPhotoViewerLongClickListener longClickListener;
 
     public static Builder build() {
         return new Builder();
@@ -244,11 +244,11 @@ public final class TransferConfig {
         this.imageLoader = imageLoader;
     }
 
-    public Transferee.OnTransfereeLongClickListener getLongClickListener() {
+    public PhotoViewer.OnPhotoViewerLongClickListener getLongClickListener() {
         return longClickListener;
     }
 
-    public void setLongClickListener(Transferee.OnTransfereeLongClickListener longClickListener) {
+    public void setLongClickListener(PhotoViewer.OnPhotoViewerLongClickListener longClickListener) {
         this.longClickListener = longClickListener;
     }
 
@@ -380,7 +380,7 @@ public final class TransferConfig {
         private int headerSize;
         private int footerSize;
 
-        private Transferee.OnTransfereeLongClickListener longClickListener;
+        private PhotoViewer.OnPhotoViewerLongClickListener longClickListener;
 
         /**
          * 当前缩略图在所有图片中的索引
@@ -419,7 +419,7 @@ public final class TransferConfig {
         }
 
         /**
-         * 为 transferee 组件设置背景颜色
+         * 为 photoViewer 组件设置背景颜色
          */
         public Builder setBackgroundColor(int backgroundColor) {
             this.backgroundColor = backgroundColor;
@@ -467,7 +467,7 @@ public final class TransferConfig {
         }
 
         /**
-         * 是否开启当 transferee 打开时，隐藏缩略图
+         * 是否开启当 photoViewer 打开时，隐藏缩略图
          */
         public Builder enableHideThumb(boolean enableHideThumb) {
             this.enableHideThumb = enableHideThumb;
@@ -478,7 +478,7 @@ public final class TransferConfig {
          * 是否启动列表随着 page 的切换而置顶滚动，仅仅针对绑定
          * RecyclerView/GridView/ListView 有效, 启动之后
          * 因为列表会实时滚动，缩略图 view 将不会出现为空的
-         * 现象，从而保证关闭 transferee 时为过渡关闭动画,
+         * 现象，从而保证关闭 photoViewer 时为过渡关闭动画,
          * 而不会出现扩散消失动画
          */
         public Builder enableScrollingWithPageChange(boolean enableScrollingWithPageChange) {
@@ -564,15 +564,15 @@ public final class TransferConfig {
         }
 
         /**
-         * 绑定 transferee 长按操作监听器
+         * 绑定 photoViewer 长按操作监听器
          */
-        public Builder setOnLongClickListener(Transferee.OnTransfereeLongClickListener listener) {
+        public Builder setOnLongClickListener(PhotoViewer.OnPhotoViewerLongClickListener listener) {
             this.longClickListener = listener;
             return this;
         }
 
         /**
-         * 在 transferee 视图放置用户自定义的视图
+         * 在 photoViewer 视图放置用户自定义的视图
          */
         public Builder setCustomView(View customView) {
             this.customView = customView;

@@ -1,4 +1,4 @@
-package com.xiaoguang.widget.transfer;
+package com.xiaoguang.widget.viewer;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,7 +34,7 @@ class LocalThumbState extends TransferState {
      * 加载 imageUrl 所关联的图片到 TransferImage 中
      *
      * @param imageUrl 图片路径
-     * @param in       true: 表示从缩略图到 Transferee, false: 从 Transferee 到缩略图
+     * @param in       true: 表示从缩略图到 PhotoViewer, false: 从 PhotoViewer 到缩略图
      */
     private void loadThumbnail(String imageUrl, final TransferImage transImage, final boolean in) {
         final TransferConfig config = transfer.getTransConfig();

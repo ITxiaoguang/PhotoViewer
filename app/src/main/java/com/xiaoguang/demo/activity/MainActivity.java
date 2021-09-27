@@ -34,11 +34,11 @@ public class MainActivity extends BaseActivity {
             UniversalImageLoader.with(getApplicationContext()).clearCache();
             GlideImageLoader.with(getApplicationContext()).clearCache();
             PicassoImageLoader.with(getApplicationContext()).clearCache();
-            transferee.clear();
+            photoViewer.clear();
         });
     }
 
     @Override
-    protected void testTransferee() {
+    protected void testPhotoViewer() {
     }
 }

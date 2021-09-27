@@ -1,4 +1,4 @@
-package com.xiaoguang.widget.transfer;
+package com.xiaoguang.widget.viewer;
 
 import android.util.Log;
 import android.util.SparseArray;
@@ -19,7 +19,7 @@ import java.util.List;
 import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE;
 
 /**
- * Transferee 布局中页面切换监听器，用于处理以下功能： <br/>
+ * PhotoViewer 布局中页面切换监听器，用于处理以下功能： <br/>
  * <ul>
  *     <li>根据相邻优先加载的规则去加载图片</li>
  *     <li>控制所有页面中视频开始播放和重置</li>
@@ -30,12 +30,12 @@ import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE;
  */
 public class TransferChangeListener extends ViewPager.SimpleOnPageChangeListener {
     private static final String TAG = "TransferChangeListener";
-    private TransferLayout transfer;
+    private TransferLayout viewer;
     private TransferConfig transConfig;
     private int selectedPos;
 
-    TransferChangeListener(TransferLayout transfer, TransferConfig transConfig) {
-        this.transfer = transfer;
+    TransferChangeListener(TransferLayout viewer, TransferConfig transConfig) {
+        this.viewer = viewer;
         this.transConfig = transConfig;
     }
 
@@ -49,10 +49,10 @@ public class TransferChangeListener extends ViewPager.SimpleOnPageChangeListener
         transConfig.setNowThumbnailIndex(position);
 
         if (transConfig.isJustLoadHitPage()) {
-            transfer.loadSourceViewOffset(position, 0);
+            viewer.loadSourceViewOffset(position, 0);
         } else {
             for (int i = 1; i <= transConfig.getOffscreenPageLimit(); i++) {
-                transfer.loadSourceViewOffset(position, i);
+                viewer.loadSourceViewOffset(position, i);
             }
         }
         bindOperationListener(position);
@@ -60,7 +60,7 @@ public class TransferChangeListener extends ViewPager.SimpleOnPageChangeListener
         if (controlScrollingWithPageChange(position)) {
             // controlScrollingWithPageChange 会异步更新 originImageList，
             // 所以这里也需要使用线程队列去保证在之后再执行一次 controlThumbHide
-            transfer.post(new Runnable() {
+            viewer.post(new Runnable() {
                 @Override
                 public void run() {
                     controlThumbHide(position);
@@ -177,7 +177,7 @@ public class TransferChangeListener extends ViewPager.SimpleOnPageChangeListener
      * 页面切换的时候，控制视频播放的重置和开始，以及图片的重置
      */
     private void controlViewState(int position) {
-        SparseArray<FrameLayout> cacheItems = transfer.transAdapter.getCacheItems();
+        SparseArray<FrameLayout> cacheItems = viewer.transAdapter.getCacheItems();
         for (int i = 0; i < cacheItems.size(); i++) {
             int key = cacheItems.keyAt(i);
             View view = cacheItems.get(key).getChildAt(0);
@@ -201,7 +201,7 @@ public class TransferChangeListener extends ViewPager.SimpleOnPageChangeListener
      * <p>2.长按事件</p>
      */
     void bindOperationListener(final int position) {
-        final FrameLayout parent = transfer.transAdapter.getParentItem(position);
+        final FrameLayout parent = viewer.transAdapter.getParentItem(position);
         if (parent == null || parent.getChildAt(0) == null) return;
 
         final View contentView = parent.getChildAt(0);
@@ -217,7 +217,7 @@ public class TransferChangeListener extends ViewPager.SimpleOnPageChangeListener
             bindClickView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    transfer.dismiss(position);
+                    viewer.dismiss(position);
                 }
             });
         }

@@ -1,4 +1,4 @@
-package com.xiaoguang.widget.transfer;
+package com.xiaoguang.widget.viewer;
 
 import android.graphics.BitmapFactory;
 import android.view.View;
@@ -22,8 +22,8 @@ import java.util.List;
 public class VideoThumbState extends TransferState {
     static final String FRAME_DIR = "frame";
 
-    VideoThumbState(TransferLayout transfer) {
-        super(transfer);
+    VideoThumbState(TransferLayout viewer) {
+        super(viewer);
     }
 
     @Override

@@ -14,7 +14,7 @@
         android:id="@+id/btn_complex_demo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="transferee 所有功能综合演示"
+        android:text="photoViewer 所有功能综合演示"
         android:textAllCaps="false" />
 
     <Button

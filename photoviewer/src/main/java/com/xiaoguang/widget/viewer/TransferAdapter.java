@@ -1,4 +1,4 @@
-package com.xiaoguang.widget.transfer;
+package com.xiaoguang.widget.viewer;
 
 import android.content.Context;
 import android.util.SparseArray;
@@ -25,15 +25,15 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * email: 196425254@qq.com
  */
 class TransferAdapter extends PagerAdapter {
-    private TransferLayout transfer;
+    private TransferLayout viewer;
     private int showIndex;
     private int imageSize;
 
     private OnInstantiateItemListener onInstantListener;
     private SparseArray<FrameLayout> containLayoutArray;
 
-    TransferAdapter(TransferLayout transfer, int imageSize, int nowThumbnailIndex) {
-        this.transfer = transfer;
+    TransferAdapter(TransferLayout viewer, int imageSize, int nowThumbnailIndex) {
+        this.viewer = viewer;
         this.imageSize = imageSize;
         this.showIndex = nowThumbnailIndex + 1 == imageSize
                 ? nowThumbnailIndex - 1 : nowThumbnailIndex + 1;
@@ -55,7 +55,7 @@ class TransferAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
         containLayoutArray.remove(position);
-        transfer.loadedIndexSet.remove(position);
+        viewer.loadedIndexSet.remove(position);
     }
 
     @NonNull
@@ -79,7 +79,7 @@ class TransferAdapter extends PagerAdapter {
     @NonNull
     private FrameLayout newParentLayout(ViewGroup container, final int pos) {
         Context context = container.getContext();
-        TransferConfig config = transfer.getTransConfig();
+        TransferConfig config = viewer.getTransConfig();
 
         View contentView;
         if (config.isVideoSource(pos)) {
@@ -94,7 +94,7 @@ class TransferAdapter extends PagerAdapter {
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             imageView.setLayoutParams(new FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
             if (config.isJustLoadHitPage())
-                transfer.getTransferState(pos).prepareTransfer(imageView, pos);
+                viewer.getTransferState(pos).prepareTransfer(imageView, pos);
             contentView = imageView;
         }
 

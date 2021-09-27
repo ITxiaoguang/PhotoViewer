@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 import com.xiaoguang.widget.style.index.CircleIndexIndicator;
 import com.xiaoguang.widget.style.index.NumberIndexIndicator;
 import com.xiaoguang.widget.style.progress.ProgressBarIndicator;
-import com.xiaoguang.widget.transfer.TransferConfig;
+import com.xiaoguang.widget.viewer.TransferConfig;
 import com.xiaoguang.demo.R;
 import com.xiaoguang.demo.SourceConfig;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -38,14 +38,14 @@ public class ComplexDemoActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        recyclerView = findViewById(R.id.rv_transferee);
-        gridView = findViewById(R.id.gv_transferee);
+        recyclerView = findViewById(R.id.rv_photoViewer);
+        gridView = findViewById(R.id.gv_photoViewer);
         imageView = findViewById(R.id.iv_single_view);
         button = findViewById(R.id.btn_none_view);
     }
 
     @Override
-    protected void testTransferee() {
+    protected void testPhotoViewer() {
         recyclerDemo();
         gridDemo();
         singleViewDemo();
@@ -54,7 +54,7 @@ public class ComplexDemoActivity extends BaseActivity {
 
     private void noneViewDemo() {
         button.setOnClickListener(v ->
-                transferee.apply(TransferConfig.build()
+                photoViewer.apply(TransferConfig.build()
                         .setImageLoader(UniversalImageLoader.with(getApplicationContext()))
                         .setSourceUrlList(SourceConfig.getMixingSourceGroup())
                         .setNowThumbnailIndex(3)
@@ -66,7 +66,7 @@ public class ComplexDemoActivity extends BaseActivity {
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this));
         ImageLoader.getInstance().displayImage(SourceConfig.getMixingSourceGroup().get(0), imageView);
         imageView.setOnClickListener(v -> {
-            transferee.apply(TransferConfig.build()
+            photoViewer.apply(TransferConfig.build()
                     .setSourceUrlList(SourceConfig.getMixingSourceGroup())
                     .setImageLoader(UniversalImageLoader.with(getApplicationContext()))
                     .enableJustLoadHitPage(true)
@@ -87,7 +87,7 @@ public class ComplexDemoActivity extends BaseActivity {
         gridView.setAdapter(new GridAdapter());
         gridView.setOnItemClickListener((parent, view, position, id) -> {
             gridTransConfig.setNowThumbnailIndex(position);
-            transferee.apply(gridTransConfig).show();
+            photoViewer.apply(gridTransConfig).show();
         });
     }
 
@@ -104,7 +104,7 @@ public class ComplexDemoActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder viewHolder, int pos) {
                 recyclerTransConfig.setNowThumbnailIndex(pos);
-                transferee.apply(recyclerTransConfig).show();
+                photoViewer.apply(recyclerTransConfig).show();
             }
 
             @Override

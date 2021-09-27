@@ -401,11 +401,11 @@ public class TransferImage extends PhotoView {
         valueAnimator.setDuration(duration);
         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
+        PropertyValuesHolder leftHolder = PropertyValuesHolder.ofFloat("left", transform.startRect.left, transform.endRect.left);
+        PropertyValuesHolder topHolder = PropertyValuesHolder.ofFloat("top", transform.startRect.top, transform.endRect.top);
+        PropertyValuesHolder widthHolder = PropertyValuesHolder.ofFloat("width", transform.startRect.width, transform.endRect.width);
+        PropertyValuesHolder heightHolder = PropertyValuesHolder.ofFloat("height", transform.startRect.height, transform.endRect.height);
         if (stage == STAGE_TRANSLATE) { // 平移动画
-            PropertyValuesHolder leftHolder = PropertyValuesHolder.ofFloat("left", transform.startRect.left, transform.endRect.left);
-            PropertyValuesHolder topHolder = PropertyValuesHolder.ofFloat("top", transform.startRect.top, transform.endRect.top);
-            PropertyValuesHolder widthHolder = PropertyValuesHolder.ofFloat("width", transform.startRect.width, transform.endRect.width);
-            PropertyValuesHolder heightHolder = PropertyValuesHolder.ofFloat("height", transform.startRect.height, transform.endRect.height);
             valueAnimator.setValues(leftHolder, topHolder, widthHolder, heightHolder);
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
@@ -420,10 +420,6 @@ public class TransferImage extends PhotoView {
                 }
             });
         } else { // 缩放动画
-            PropertyValuesHolder leftHolder = PropertyValuesHolder.ofFloat("left", transform.startRect.left, transform.endRect.left);
-            PropertyValuesHolder topHolder = PropertyValuesHolder.ofFloat("top", transform.startRect.top, transform.endRect.top);
-            PropertyValuesHolder widthHolder = PropertyValuesHolder.ofFloat("width", transform.startRect.width, transform.endRect.width);
-            PropertyValuesHolder heightHolder = PropertyValuesHolder.ofFloat("height", transform.startRect.height, transform.endRect.height);
             PropertyValuesHolder scaleHolder = PropertyValuesHolder.ofFloat("scale", transform.startScale, transform.endScale);
             valueAnimator.setValues(scaleHolder, leftHolder, topHolder, widthHolder, heightHolder);
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

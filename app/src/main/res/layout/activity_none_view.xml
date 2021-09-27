@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="没有绑定任何 View,直接显示 Transferee" />
+        android:text="没有绑定任何 View,直接显示 PhotoViewer" />
 
 </FrameLayout>
 

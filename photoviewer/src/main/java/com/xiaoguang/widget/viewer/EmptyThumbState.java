@@ -1,4 +1,4 @@
-package com.xiaoguang.widget.transfer;
+package com.xiaoguang.widget.viewer;
 
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
@@ -20,8 +20,8 @@ import java.util.List;
  */
 class EmptyThumbState extends TransferState {
 
-    EmptyThumbState(TransferLayout transfer) {
-        super(transfer);
+    EmptyThumbState(TransferLayout viewer) {
+        super(viewer);
     }
 
     @Override

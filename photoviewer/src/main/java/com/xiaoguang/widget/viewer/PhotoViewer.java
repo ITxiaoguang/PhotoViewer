@@ -1,4 +1,4 @@
-package com.xiaoguang.widget.transfer;
+package com.xiaoguang.widget.viewer;
 
 import android.app.Activity;
 import android.app.Application;
@@ -22,16 +22,16 @@ import java.io.File;
 
 /**
  * Main workflow: <br/>
- * 1、点击缩略图展示缩略图到 transferee 过渡动画 <br/>
+ * 1、点击缩略图展示缩略图到 photoViewer 过渡动画 <br/>
  * 2、显示下载高清图片进度 <br/>
  * 3、加载完成显示高清图片 <br/>
  * 4、高清图支持手势缩放 <br/>
- * 5、关闭 transferee 展示 transferee 到原缩略图的过渡动画 <br/>
+ * 5、关闭 photoViewer 展示 photoViewer 到原缩略图的过渡动画 <br/>
  * Created by Vans Z on 2017/1/19.
  * <p>
  * email: 196425254@qq.com
  */
-public class Transferee implements DialogInterface.OnShowListener,
+public class PhotoViewer implements DialogInterface.OnShowListener,
         DialogInterface.OnKeyListener,
         TransferLayout.OnLayoutResetListener,
         AppManager.OnAppStateChangeListener {
@@ -41,17 +41,17 @@ public class Transferee implements DialogInterface.OnShowListener,
 
     private TransferLayout transLayout;
     private TransferConfig transConfig;
-    private OnTransfereeStateChangeListener transListener;
+    private OnPhotoViewerStateChangeListener transListener;
 
-    // 因为Dialog的关闭有动画延迟，固不能使用 dialog.isShowing, 去判断 transferee 的显示逻辑
+    // 因为Dialog的关闭有动画延迟，固不能使用 dialog.isShowing, 去判断 photoViewer 的显示逻辑
     private boolean shown;
 
     /**
-     * 构造方法私有化，通过{@link #getDefault(Context)} 创建 transferee
+     * 构造方法私有化，通过{@link #getDefault(Context)} 创建 photoViewer
      *
      * @param context 上下文环境
      */
-    private Transferee(Context context) {
+    private PhotoViewer(Context context) {
         this.context = context;
         createLayout();
         createDialog();
@@ -60,10 +60,10 @@ public class Transferee implements DialogInterface.OnShowListener,
 
     /**
      * @param context
-     * @return {@link Transferee}
+     * @return {@link PhotoViewer}
      */
-    public static Transferee getDefault(Context context) {
-        return new Transferee(context);
+    public static PhotoViewer getDefault(Context context) {
+        return new PhotoViewer(context);
     }
 
     private void createLayout() {
@@ -103,12 +103,12 @@ public class Transferee implements DialogInterface.OnShowListener,
     }
 
     /**
-     * 配置 transferee 参数对象
+     * 配置 photoViewer 参数对象
      *
      * @param config 参数对象
-     * @return transferee
+     * @return photoViewer
      */
-    public Transferee apply(TransferConfig config) {
+    public PhotoViewer apply(TransferConfig config) {
         if (!shown) {
             transConfig = config;
             OriginalViewHelper.getInstance().fillOriginImages(config);
@@ -119,7 +119,7 @@ public class Transferee implements DialogInterface.OnShowListener,
     }
 
     /**
-     * transferee 是否显示
+     * photoViewer 是否显示
      *
      * @return true ：显示, false ：关闭
      */
@@ -128,7 +128,7 @@ public class Transferee implements DialogInterface.OnShowListener,
     }
 
     /**
-     * 显示 transferee
+     * 显示 photoViewer
      */
     public void show() {
         if (shown) return;
@@ -141,11 +141,11 @@ public class Transferee implements DialogInterface.OnShowListener,
     }
 
     /**
-     * 显示 transferee, 并设置 OnTransfereeChangeListener
+     * 显示 photoViewer, 并设置 OnPhotoViewerChangeListener
      *
-     * @param listener {@link OnTransfereeStateChangeListener}
+     * @param listener {@link OnPhotoViewerStateChangeListener}
      */
-    public void show(OnTransfereeStateChangeListener listener) {
+    public void show(OnPhotoViewerStateChangeListener listener) {
         if (shown || listener == null) return;
         transDialog.show();
         adjustTopAndBottom();
@@ -155,7 +155,7 @@ public class Transferee implements DialogInterface.OnShowListener,
     }
 
     /**
-     * 关闭 transferee
+     * 关闭 photoViewer
      */
     public void dismiss() {
         if (shown && transLayout.dismiss(transConfig.getNowThumbnailIndex())) {
@@ -171,7 +171,7 @@ public class Transferee implements DialogInterface.OnShowListener,
     }
 
     /**
-     * 清除 transferee 缓存,包括图片和视频文件缓存，注意清除视频缓存必须保证 transferee 是关闭状态
+     * 清除 photoViewer 缓存,包括图片和视频文件缓存，注意清除视频缓存必须保证 photoViewer 是关闭状态
      */
     public void clear() {
         if (transConfig != null && transConfig.getImageLoader() != null) {
@@ -240,11 +240,11 @@ public class Transferee implements DialogInterface.OnShowListener,
     }
 
     /**
-     * 设置 Transferee 显示和关闭的监听器
+     * 设置 PhotoViewer 显示和关闭的监听器
      *
-     * @param listener {@link OnTransfereeStateChangeListener}
+     * @param listener {@link OnPhotoViewerStateChangeListener}
      */
-    public void setOnTransfereeStateChangeListener(OnTransfereeStateChangeListener listener) {
+    public void setOnPhotoViewerStateChangeListener(OnPhotoViewerStateChangeListener listener) {
         transListener = listener;
     }
 
@@ -259,17 +259,17 @@ public class Transferee implements DialogInterface.OnShowListener,
     }
 
     /**
-     * Transferee 显示的时候调用 {@link OnTransfereeStateChangeListener#onShow()}
+     * PhotoViewer 显示的时候调用 {@link OnPhotoViewerStateChangeListener#onShow()}
      * <p>
-     * Transferee 关闭的时候调用 {@link OnTransfereeStateChangeListener#onDismiss()}
+     * PhotoViewer 关闭的时候调用 {@link OnPhotoViewerStateChangeListener#onDismiss()}
      */
-    public interface OnTransfereeStateChangeListener {
+    public interface OnPhotoViewerStateChangeListener {
         void onShow();
 
         void onDismiss();
     }
 
-    public interface OnTransfereeLongClickListener {
+    public interface OnPhotoViewerLongClickListener {
         void onLongClick(ImageView imageView, String imageUri, int pos);
     }
 

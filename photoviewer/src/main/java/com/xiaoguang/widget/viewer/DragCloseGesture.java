@@ -1,4 +1,4 @@
-package com.xiaoguang.widget.transfer;
+package com.xiaoguang.widget.viewer;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

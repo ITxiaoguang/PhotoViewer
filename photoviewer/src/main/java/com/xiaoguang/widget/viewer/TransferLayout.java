@@ -1,4 +1,4 @@
-package com.xiaoguang.widget.transfer;
+package com.xiaoguang.widget.viewer;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -27,7 +27,7 @@ import java.util.Set;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 /**
- * Transferee 中 Dialog 显示的内容
+ * PhotoViewer 中 Dialog 显示的内容
  * <p>
  * 所有过渡动画的展示，图片的加载都是在这个 FrameLayout 中实现
  * <p>
@@ -260,7 +260,7 @@ class TransferLayout extends FrameLayout {
     }
 
     /**
-     * transferee STATE_TRANS_IN 动画执行完毕后，开始显示内容
+     * photoViewer STATE_TRANS_IN 动画执行完毕后，开始显示内容
      */
     private void resumeTransfer() {
         isAnimationRunning = false;
@@ -330,7 +330,7 @@ class TransferLayout extends FrameLayout {
 
 
     /**
-     * 初始化 TransferLayout 中的各个组件，并执行图片从缩略图到 Transferee 进入动画
+     * 初始化 TransferLayout 中的各个组件，并执行图片从缩略图到 PhotoViewer 进入动画
      */
     void show() {
         int nowThumbnailIndex = transConfig.getNowThumbnailIndex();
@@ -367,9 +367,9 @@ class TransferLayout extends FrameLayout {
     }
 
     /**
-     * 开启 Transferee 关闭动画，并隐藏 transferLayout 中的各个组件
+     * 开启 PhotoViewer 关闭动画，并隐藏 transferLayout 中的各个组件
      *
-     * @param pos 关闭 Transferee 时图片所在的索引
+     * @param pos 关闭 PhotoViewer 时图片所在的索引
      * @return 是否关闭成功
      */
     boolean dismiss(int pos) {

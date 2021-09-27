@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ConvertUtils;
 import com.bumptech.glide.Glide;
-import com.xiaoguang.widget.style.index.NumberIndexIndicator;
-import com.xiaoguang.widget.style.progress.ProgressBarIndicator;
-import com.xiaoguang.widget.transfer.TransferConfig;
+import com.core.glideimageloader.GlideImageLoader;
 import com.xiaoguang.demo.R;
 import com.xiaoguang.demo.SourceConfig;
 import com.xiaoguang.demo.divider.DividerGridItemDecoration;
-import com.core.glideimageloader.GlideImageLoader;
+import com.xiaoguang.widget.style.index.NumberIndexIndicator;
+import com.xiaoguang.widget.style.progress.ProgressBarIndicator;
+import com.xiaoguang.widget.viewer.TransferConfig;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -44,7 +44,7 @@ public class FriendsCircleActivity extends BaseActivity {
     }
 
     @Override
-    protected void testTransferee() {
+    protected void testPhotoViewer() {
     }
 
     private TransferConfig.Builder getBuilder(int pos) {
@@ -94,7 +94,7 @@ public class FriendsCircleActivity extends BaseActivity {
             photosAdapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, RecyclerView.ViewHolder holder, int pos) {
-                    transferee.apply(getBuilder(position)
+                    photoViewer.apply(getBuilder(position)
                             .setNowThumbnailIndex(pos)
                             .setSourceUrlList(item.second)
                             .bindRecyclerView(((RecyclerView) view.getParent()), R.id.iv_thum)

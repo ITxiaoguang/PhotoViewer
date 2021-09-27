@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.xiaoguang.widget.style.index.CircleIndexIndicator;
 import com.xiaoguang.widget.style.progress.ProgressBarIndicator;
-import com.xiaoguang.widget.transfer.TransferConfig;
+import com.xiaoguang.widget.viewer.TransferConfig;
 import com.xiaoguang.demo.R;
 import com.xiaoguang.demo.SourceConfig;
 import com.core.glideimageloader.GlideImageLoader;
@@ -49,7 +49,7 @@ public class HeaderRecyclerActivity extends BaseActivity {
             public void onItemClick(View view, RecyclerView.ViewHolder viewHolder, int position) {
                 // position 减去 header 的数量后，才是当前图片正确的索引
                 config.setNowThumbnailIndex(position - headerAndFooterWrapper.getHeadersCount());
-                transferee.apply(config).show();
+                photoViewer.apply(config).show();
             }
 
             @Override
@@ -98,7 +98,7 @@ public class HeaderRecyclerActivity extends BaseActivity {
     }
 
     @Override
-    protected void testTransferee() {
+    protected void testPhotoViewer() {
         config = TransferConfig.build()
                 .setSourceUrlList(SourceConfig.getSourcePicUrlList())
                 .setProgressIndicator(new ProgressBarIndicator())

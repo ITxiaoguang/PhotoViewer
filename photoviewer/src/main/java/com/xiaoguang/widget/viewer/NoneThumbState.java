@@ -1,4 +1,4 @@
-package com.xiaoguang.widget.transfer;
+package com.xiaoguang.widget.viewer;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,7 +11,7 @@ import com.xiaoguang.widget.view.image.TransferImage;
 import java.io.File;
 
 /**
- * 没有缩略图 ImageView, 直接在 transferee 中展示图片
+ * 没有缩略图 ImageView, 直接在 photoViewer 中展示图片
  * <p>
  * Created by Vans Z on 2020/4/16.
  * <p>
@@ -19,8 +19,8 @@ import java.io.File;
  */
 public class NoneThumbState extends TransferState {
 
-    NoneThumbState(TransferLayout transfer) {
-        super(transfer);
+    NoneThumbState(TransferLayout viewer) {
+        super(viewer);
     }
 
     @Override

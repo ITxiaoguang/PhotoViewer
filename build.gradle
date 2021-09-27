@@ -49,7 +49,7 @@ project.ext {
     libRecyclerviewAdpater = "com.zhy:base-rvadapter:3.0.3"
     libImmersionbar = "com.gyf.immersionbar:immersionbar:3.0.0"
     libLeakcanary = "com.squareup.leakcanary:leakcanary-android:2.3"
-    // Transferee 核心库所依赖项目
+    // PhotoViewer 核心库所依赖项目
     libAppcompat = "androidx.appcompat:appcompat:1.1.0"
     libSupportRecyclerview = "androidx.recyclerview:recyclerview:1.0.0"
     libExoplayer = "com.google.android.exoplayer:exoplayer:2.10.4"
