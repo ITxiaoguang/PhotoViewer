@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.xiaoguang.widget.style.IIndexIndicator;
+import com.xiaoguang.widget.callback.CustomViewCallback;
 import com.xiaoguang.widget.view.image.TransferImage;
 import com.xiaoguang.widget.view.video.ExoVideoView;
 
@@ -38,8 +39,8 @@ import java.util.Set;
 class TransferLayout extends FrameLayout {
     private Context context;
 
-    private com.xiaoguang.widget.viewer.TransferConfig transConfig;
-    private com.xiaoguang.widget.viewer.DragCloseGesture dragCloseGesture;
+    private TransferConfig transConfig;
+    private DragCloseGesture dragCloseGesture;
 
     private TransferChangeListener transChangeListener;
     private OnLayoutResetListener layoutResetListener;
@@ -65,7 +66,7 @@ class TransferLayout extends FrameLayout {
     /**
      * 拖拽开始和未满足拖拽返回执行的rollBack回调
      */
-    private com.xiaoguang.widget.viewer.DragCloseGesture.DragCloseListener dragCloseListener = new com.xiaoguang.widget.viewer.DragCloseGesture.DragCloseListener() {
+    private DragCloseGesture.DragCloseListener dragCloseListener = new DragCloseGesture.DragCloseListener() {
         @Override
         public void onDragStar() {
             if (transConfig.isEnableDragHide()) {
@@ -219,7 +220,7 @@ class TransferLayout extends FrameLayout {
      * 加载 [position - offset] 到 [position + offset] 范围内有效索引位置的图片
      *
      * @param position 当前显示图片的索引
-     * @param offset   position 左右便宜量
+     * @param offset   position 左右偏移量
      */
     void loadSourceViewOffset(int position, int offset) {
         int left = position - offset;
@@ -233,7 +234,7 @@ class TransferLayout extends FrameLayout {
             loadSourceView(left);
             loadedIndexSet.add(left);
         }
-        if (right < transConfig.getSourceUrlList().size() && !loadedIndexSet.contains(right)) {
+        if (right < transConfig.getSourceSize() && !loadedIndexSet.contains(right)) {
             loadSourceView(right);
             loadedIndexSet.add(right);
         }
@@ -278,7 +279,7 @@ class TransferLayout extends FrameLayout {
      */
     private void createTransferViewPager(TransferState transferState) {
         transAdapter = new TransferAdapter(this,
-                transConfig.getSourceUrlList().size(),
+                transConfig.getSourceSize(),
                 transConfig.getNowThumbnailIndex());
         transAdapter.setOnInstantListener(instantListener);
 
@@ -316,7 +317,7 @@ class TransferLayout extends FrameLayout {
         transViewPager.removeOnPageChangeListener(transChangeListener);
     }
 
-    com.xiaoguang.widget.viewer.TransferConfig getTransConfig() {
+    TransferConfig getTransConfig() {
         return transConfig;
     }
 
@@ -353,7 +354,7 @@ class TransferLayout extends FrameLayout {
         } else if (transConfig.getOriginImageList().isEmpty()) { // 用户没有绑定任何 View
             transferState = new NoneThumbState(this);
         } else {
-            String url = transConfig.getSourceUrlList().get(position);
+            String url = transConfig.getSourceUrl(position);
 
             if (transConfig.getImageLoader().getCache(url) != null) {
                 // 即使是网络图片，但是之前已经加载到本地，那么也是本地图片
@@ -472,7 +473,7 @@ class TransferLayout extends FrameLayout {
      *
      * @param config 参数对象
      */
-    void apply(com.xiaoguang.widget.viewer.TransferConfig config) {
+    void apply(TransferConfig config) {
         transConfig = config;
         if (transChangeListener == null) {
             transChangeListener = new TransferChangeListener(this, transConfig);
@@ -480,7 +481,7 @@ class TransferLayout extends FrameLayout {
             transChangeListener.updateConfig(transConfig);
         }
         if (transConfig.isEnableDragClose())
-            this.dragCloseGesture = new com.xiaoguang.widget.viewer.DragCloseGesture(this, dragCloseListener);
+            this.dragCloseGesture = new DragCloseGesture(this, dragCloseListener);
     }
 
     /**
@@ -514,7 +515,7 @@ class TransferLayout extends FrameLayout {
      */
     private void showIndexIndicator(boolean init) {
         IIndexIndicator indexIndicator = transConfig.getIndexIndicator();
-        if (indexIndicator != null && transConfig.getSourceUrlList().size() >= 2) {
+        if (indexIndicator != null && transConfig.getSourceSize() >= 2) {
             if (init) indexIndicator.attach(this);
             indexIndicator.onShow(transViewPager);
         }
@@ -525,7 +526,7 @@ class TransferLayout extends FrameLayout {
      */
     private void hideIndexIndicator() {
         IIndexIndicator indexIndicator = transConfig.getIndexIndicator();
-        if (indexIndicator != null && transConfig.getSourceUrlList().size() >= 2) {
+        if (indexIndicator != null && transConfig.getSourceSize() >= 2) {
             indexIndicator.onHide();
         }
     }
@@ -536,7 +537,13 @@ class TransferLayout extends FrameLayout {
     private void showCustomView(boolean init) {
         View customView = transConfig.getCustomView();
         if (customView != null) {
-            if (init) addView(customView);
+            if (init) {
+                addView(customView);
+                CustomViewCallback callback = transConfig.getCustomViewCallback();
+                if (null != callback) {
+                    callback.onBindView(customView, transConfig);// 绑定自定义view
+                }
+            }
             customView.setVisibility(View.VISIBLE);
         }
     }
@@ -556,7 +563,7 @@ class TransferLayout extends FrameLayout {
      */
     private void removeIndexIndicator() {
         IIndexIndicator indexIndicator = transConfig.getIndexIndicator();
-        if (indexIndicator != null && transConfig.getSourceUrlList().size() >= 2) {
+        if (indexIndicator != null && transConfig.getSourceSize() >= 2) {
             indexIndicator.onRemove();
         }
     }

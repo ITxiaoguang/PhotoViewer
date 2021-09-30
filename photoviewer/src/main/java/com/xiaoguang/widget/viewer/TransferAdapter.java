@@ -1,8 +1,12 @@
 package com.xiaoguang.widget.viewer;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import android.content.Context;
 import android.util.SparseArray;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -11,11 +15,9 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.xiaoguang.widget.callback.CustomViewCallback;
 import com.xiaoguang.widget.view.image.TransferImage;
 import com.xiaoguang.widget.view.video.ExoVideoView;
-
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * 展示大图组件 ViewPager 的图片数据适配器
@@ -109,8 +111,7 @@ class TransferAdapter extends PagerAdapter {
     /**
      * 获取指定索引页面中的 TransferImage
      *
-     * @param position
-     * @return
+     * @param position position
      */
     TransferImage getImageItem(int position) {
         FrameLayout parentLayout = containLayoutArray.get(position);
@@ -121,13 +122,84 @@ class TransferAdapter extends PagerAdapter {
     }
 
     /**
+     * 获取指定索引页面中的 TransferImage
+     *
+     * @param config   config
+     * @param position pos
+     */
+    TransferImage getImageItem(int position, TransferConfig config) {
+        FrameLayout parentLayout = containLayoutArray.get(position);
+        if (parentLayout != null) {
+            if (0 != config.getScrollCustomViewId()) {
+                View inflate = LayoutInflater.from(parentLayout.getContext()).inflate(config.getScrollCustomViewId(), null);
+                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+                inflate.setLayoutParams(lp);
+                parentLayout.addView(inflate, parentLayout.getChildCount());
+                CustomViewCallback callback = config.getScrollCustomViewCallback();
+                if (null != callback) {
+                    callback.onBindView(inflate, config);
+                }
+            }
+            if (0 != config.getScrollImageCustomViewId()) {
+                View inflate = LayoutInflater.from(parentLayout.getContext()).inflate(config.getScrollImageCustomViewId(), null);
+                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+                inflate.setLayoutParams(lp);
+                parentLayout.addView(inflate, parentLayout.getChildCount());
+                CustomViewCallback callback = config.getScrollImageCustomViewCallback();
+                if (null != callback) {
+                    callback.onBindView(inflate, config);
+                }
+            }
+        }
+        if (parentLayout != null && parentLayout.getChildAt(0) instanceof TransferImage) {
+            return ((TransferImage) parentLayout.getChildAt(0));
+        }
+        return null;
+    }
+
+    /**
      * 获取指定页面中的 ExoVideoView
      *
-     * @param position
-     * @return
+     * @param position position
      */
     ExoVideoView getVideoItem(int position) {
         FrameLayout parentLayout = containLayoutArray.get(position);
+        if (parentLayout != null && parentLayout.getChildAt(0) instanceof ExoVideoView) {
+            return ((ExoVideoView) parentLayout.getChildAt(0));
+        }
+        return null;
+    }
+
+    /**
+     * 获取指定页面中的 ExoVideoView
+     *
+     * @param config   config
+     * @param position position
+     */
+    ExoVideoView getVideoItem(int position, TransferConfig config) {
+        FrameLayout parentLayout = containLayoutArray.get(position);
+        if (parentLayout != null) {
+            if (0 != config.getScrollCustomViewId()) {
+                View inflate = LayoutInflater.from(parentLayout.getContext()).inflate(config.getScrollCustomViewId(), null);
+                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+                inflate.setLayoutParams(lp);
+                parentLayout.addView(inflate, parentLayout.getChildCount());
+                CustomViewCallback callback = config.getScrollCustomViewCallback();
+                if (null != callback) {
+                    callback.onBindView(inflate, config);
+                }
+            }
+            if (0 != config.getScrollVideoCustomViewId()) {
+                View inflate = LayoutInflater.from(parentLayout.getContext()).inflate(config.getScrollVideoCustomViewId(), null);
+                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+                inflate.setLayoutParams(lp);
+                parentLayout.addView(inflate, parentLayout.getChildCount());
+                CustomViewCallback callback = config.getScrollVideoCustomViewCallback();
+                if (null != callback) {
+                    callback.onBindView(inflate, config);
+                }
+            }
+        }
         if (parentLayout != null && parentLayout.getChildAt(0) instanceof ExoVideoView) {
             return ((ExoVideoView) parentLayout.getChildAt(0));
         }

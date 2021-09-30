@@ -24,7 +24,7 @@ public interface ImageLoader {
     /**
      * 加载原图
      *
-     * @param imageUrl       图片地址
+     * @param imageUrl 图片地址
      * @param callback 源图加载的回调
      */
     void loadSource(String imageUrl, @Nullable final SourceCallback callback);

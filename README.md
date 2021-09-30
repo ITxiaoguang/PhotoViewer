@@ -1,5 +1,5 @@
 # PhotoViewer
-PhotoViewer 一款功能超强的相册查看器。An awesome photo album viewer.
+PhotoViewer 一款功能超强的相册查看器。An awesome photo album viewer.持续更新中...
 
 # Transferee [![](https://jitpack.io/v/Hitomis/transferee.svg)](https://jitpack.io/#Hitomis/transferee)
 transferee 可以帮助你完成从缩略视图到原视图的无缝过渡转变, 优雅的浏览普通图片、长图、gif图、视频等不同格式的多媒体。
@@ -19,15 +19,34 @@ transferee 可以帮助你完成从缩略视图到原视图的无缝过渡转变
 + 支持傻瓜式绑定 RecyclerView / ListView / GridView / ImageView
 + 支持不绑定任何 View, 即可启动 photoViewer
 
+已解决（全局搜 FIX BUG）：
++ IM多布局情况下数组越界
++ 解决判断视频不友好
++ 图片无bitmap情况下，点开图片弹窗无内容
+
+已支持：
++ 固定自定义View和自定义View监听控件事件
++ 跟随图片、跟随视频滚动的自定义View
++ 图片、视频长按回调
++ GlideImageLoader 支持自定义图片缓存路径
++ 拆分图片、视频资源
+
 todo:
 + 支持下载图片、视频、动态图
 + 支持区分图片、视频、gif类型
 + 支持得到当前页图片的bitmap
 + 更友好的视频播放器
 
-拓展:
+todo拓展:
 + 支持图片多个二维码扫码
 + 播放视频时各种拓展，如：弹幕、倍数播放、画中画
+
+你可以通过这个框架做什么？
++ IM里面的查看图片，查看原图功能。例如：高仿微信聊天查看图片。
++ 列表查看图片功能。例如：朋友圈里的查看图片。
++ 查看大图功能。例如：点击放大头像。
++ 相册查看图片功能。
+
 
 如有任何问题欢迎提 Issues
 

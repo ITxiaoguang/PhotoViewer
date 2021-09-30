@@ -30,6 +30,5 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':photoviewer')
-    implementation libUtilCodex
     implementation libGlide
 }

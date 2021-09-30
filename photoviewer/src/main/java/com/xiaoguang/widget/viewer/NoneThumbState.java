@@ -38,8 +38,9 @@ public class NoneThumbState extends TransferState {
     public void transferLoad(final int position) {
         TransferAdapter adapter = transfer.transAdapter;
         final TransferConfig transConfig = transfer.getTransConfig();
-        final String imgUrl = transConfig.getSourceUrlList().get(position);
-        final TransferImage targetImage = adapter.getImageItem(position);
+        final String imgUrl = transConfig.getSourceUrl(position);
+//        final TransferImage targetImage = adapter.getImageItem(position);
+        final TransferImage targetImage = adapter.getImageItem(position, transConfig);
 
         File cache = transConfig.getImageLoader().getCache(imgUrl);
         if (cache == null) {

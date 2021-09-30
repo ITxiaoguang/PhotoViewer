@@ -31,11 +31,15 @@ class EmptyThumbState extends TransferState {
 
     @Override
     public TransferImage transferIn(final int position) {
-        ImageView originImage = transfer.getTransConfig()
-                .getOriginImageList().get(position);
+        TransferConfig config = transfer.getTransConfig();
+        ImageView originImage = config.getOriginImageList().get(position);
 
         TransferImage transImage = createTransferImage(originImage, true);
-        transImage.setImageDrawable(originImage.getDrawable());
+        Drawable drawable = originImage.getDrawable();
+        if (null == drawable) {// FIX BUG 图片无bitmap情况下，点开图片弹窗无内容
+            drawable = config.getErrorDrawable(transfer.getContext());
+        }
+        transImage.setImageDrawable(drawable);
         transImage.transformIn(TransferImage.STAGE_TRANSLATE);
         transfer.addView(transImage, 1);
 
@@ -46,8 +50,9 @@ class EmptyThumbState extends TransferState {
     public void transferLoad(final int position) {
         TransferAdapter adapter = transfer.transAdapter;
         final TransferConfig config = transfer.getTransConfig();
-        final String imgUrl = config.getSourceUrlList().get(position);
-        final TransferImage targetImage = adapter.getImageItem(position);
+        final String imgUrl = config.getSourceUrl(position);
+//        final TransferImage targetImage = adapter.getImageItem(position);
+        final TransferImage targetImage = adapter.getImageItem(position, config);
 
         Drawable placeHolder;
         if (config.isJustLoadHitPage()) {
@@ -102,8 +107,10 @@ class EmptyThumbState extends TransferState {
 
         if (position <= originImageList.size() - 1 && originImageList.get(position) != null) {
             transImage = createTransferImage(originImageList.get(position), true);
+//            Drawable thumbnailDrawable = transfer.transAdapter.getImageItem(
+//                    config.getNowThumbnailIndex()).getDrawable();
             Drawable thumbnailDrawable = transfer.transAdapter.getImageItem(
-                    config.getNowThumbnailIndex()).getDrawable();
+                    config.getNowThumbnailIndex(), config).getDrawable();
             transImage.setImageDrawable(thumbnailDrawable);
             transImage.transformOut(TransferImage.STAGE_TRANSLATE);
 
@@ -123,7 +130,11 @@ class EmptyThumbState extends TransferState {
         Drawable placeHolder = null;
 
         TransferConfig config = transfer.getTransConfig();
-        ImageView originImage = config.getOriginImageList().get(position);
+        List<ImageView> imageViewList = config.getOriginImageList();
+        ImageView originImage = null;
+        if (imageViewList.size() > position) {
+            originImage = imageViewList.get(position);
+        }
         if (originImage != null) {
             placeHolder = originImage.getDrawable();
         }

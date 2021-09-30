@@ -1,7 +1,10 @@
 package com.xiaoguang.widget.viewer;
 
+import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE;
+
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
@@ -16,8 +19,6 @@ import com.xiaoguang.widget.view.video.ExoVideoView;
 
 import java.util.List;
 
-import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE;
-
 /**
  * PhotoViewer 布局中页面切换监听器，用于处理以下功能： <br/>
  * <ul>
@@ -30,12 +31,13 @@ import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE;
  */
 public class TransferChangeListener extends ViewPager.SimpleOnPageChangeListener {
     private static final String TAG = "TransferChangeListener";
-    private TransferLayout viewer;
+    private TransferLayout transferLayout;
     private TransferConfig transConfig;
+    private long selectedTime = 0L;
     private int selectedPos;
 
-    TransferChangeListener(TransferLayout viewer, TransferConfig transConfig) {
-        this.viewer = viewer;
+    TransferChangeListener(TransferLayout transferLayout, TransferConfig transConfig) {
+        this.transferLayout = transferLayout;
         this.transConfig = transConfig;
     }
 
@@ -45,14 +47,20 @@ public class TransferChangeListener extends ViewPager.SimpleOnPageChangeListener
 
     @Override
     public void onPageSelected(final int position) {
+        // 过滤极短时间内调用2次onPageSelected的bug
+        if (System.currentTimeMillis() - selectedTime < 50 && selectedPos == position) {
+            return;
+        }
+        selectedTime = System.currentTimeMillis();
+
         selectedPos = position;
         transConfig.setNowThumbnailIndex(position);
 
         if (transConfig.isJustLoadHitPage()) {
-            viewer.loadSourceViewOffset(position, 0);
+            transferLayout.loadSourceViewOffset(position, 0);
         } else {
             for (int i = 1; i <= transConfig.getOffscreenPageLimit(); i++) {
-                viewer.loadSourceViewOffset(position, i);
+                transferLayout.loadSourceViewOffset(position, i);
             }
         }
         bindOperationListener(position);
@@ -60,7 +68,7 @@ public class TransferChangeListener extends ViewPager.SimpleOnPageChangeListener
         if (controlScrollingWithPageChange(position)) {
             // controlScrollingWithPageChange 会异步更新 originImageList，
             // 所以这里也需要使用线程队列去保证在之后再执行一次 controlThumbHide
-            viewer.post(new Runnable() {
+            transferLayout.post(new Runnable() {
                 @Override
                 public void run() {
                     controlThumbHide(position);
@@ -177,7 +185,7 @@ public class TransferChangeListener extends ViewPager.SimpleOnPageChangeListener
      * 页面切换的时候，控制视频播放的重置和开始，以及图片的重置
      */
     private void controlViewState(int position) {
-        SparseArray<FrameLayout> cacheItems = viewer.transAdapter.getCacheItems();
+        SparseArray<FrameLayout> cacheItems = transferLayout.transAdapter.getCacheItems();
         for (int i = 0; i < cacheItems.size(); i++) {
             int key = cacheItems.keyAt(i);
             View view = cacheItems.get(key).getChildAt(0);
@@ -201,7 +209,7 @@ public class TransferChangeListener extends ViewPager.SimpleOnPageChangeListener
      * <p>2.长按事件</p>
      */
     void bindOperationListener(final int position) {
-        final FrameLayout parent = viewer.transAdapter.getParentItem(position);
+        final FrameLayout parent = transferLayout.transAdapter.getParentItem(position);
         if (parent == null || parent.getChildAt(0) == null) return;
 
         final View contentView = parent.getChildAt(0);
@@ -217,21 +225,30 @@ public class TransferChangeListener extends ViewPager.SimpleOnPageChangeListener
             bindClickView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    viewer.dismiss(position);
+                    transferLayout.dismiss(position);
                 }
             });
         }
-        // 只有图片支持长按事件
-        if (contentView instanceof TransferImage && transConfig.getLongClickListener() != null) {
-            contentView.setOnLongClickListener(new View.OnLongClickListener() {
+        // 图片、视频支持长按事件
+        if (/*contentView instanceof TransferImage && */transConfig.getLongClickListener() != null) {
+            bindClickView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    TransferImage targetImage = ((TransferImage) contentView);
-                    String sourceUrl = transConfig.getSourceUrlList().get(position);
-                    transConfig.getLongClickListener().onLongClick(targetImage, sourceUrl, position);
+                    View currentView;
+                    if (contentView instanceof TransferImage) {
+                        currentView = contentView;
+                    } else {
+                        currentView = parent;
+                    }
+                    String sourceUrl = transConfig.getSourceUrl(position);
+                    transConfig.getLongClickListener().onLongClick(currentView, sourceUrl, position, transConfig);
                     return false;
                 }
             });
+        }
+
+        if (null != transConfig.getChangedCallback()) {
+            transConfig.getChangedCallback().onPageSelectedCallback(position, bindClickView, parent, transConfig);
         }
     }
 }

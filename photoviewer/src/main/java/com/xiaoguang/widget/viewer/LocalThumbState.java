@@ -1,11 +1,14 @@
 package com.xiaoguang.widget.viewer;
 
+import static com.xiaoguang.widget.utils.ImageUtils.TYPE_GIF;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
 import com.xiaoguang.widget.loader.ImageLoader;
 import com.xiaoguang.widget.utils.ImageUtils;
+import com.xiaoguang.widget.utils.PVLogUtil;
 import com.xiaoguang.widget.view.image.TransferImage;
 
 import java.io.File;
@@ -13,8 +16,6 @@ import java.io.IOException;
 import java.util.List;
 
 import pl.droidsonroids.gif.GifDrawable;
-
-import static com.xiaoguang.widget.utils.ImageUtils.TYPE_GIF;
 
 /**
  * 高清图图片已经加载过了，使用高清图作为缩略图。
@@ -55,7 +56,7 @@ class LocalThumbState extends TransferState {
     @Override
     public void prepareTransfer(final TransferImage transImage, final int position) {
         final TransferConfig config = transfer.getTransConfig();
-        String imgUrl = config.getSourceUrlList().get(position);
+        String imgUrl = config.getSourceUrl(position);
         File cache = config.getImageLoader().getCache(imgUrl);
         if (cache == null) return;
         if (ImageUtils.getImageType(cache) == TYPE_GIF) {
@@ -74,7 +75,7 @@ class LocalThumbState extends TransferState {
         TransferConfig config = transfer.getTransConfig();
         TransferImage transImage = createTransferImage(
                 config.getOriginImageList().get(position), true);
-        loadThumbnail(config.getSourceUrlList().get(position), transImage, true);
+        loadThumbnail(config.getSourceUrl(position), transImage, true);
         transfer.addView(transImage, 1);
         return transImage;
     }
@@ -82,8 +83,12 @@ class LocalThumbState extends TransferState {
     @Override
     public void transferLoad(final int position) {
         final TransferConfig config = transfer.getTransConfig();
-        final String imgUrl = config.getSourceUrlList().get(position);
-        final TransferImage targetImage = transfer.transAdapter.getImageItem(position);
+        final String imgUrl = config.getSourceUrl(position);
+//        final TransferImage targetImage = transfer.transAdapter.getImageItem(position);
+        final TransferImage targetImage = transfer.transAdapter.getImageItem(position, config);
+        if (null == targetImage) {
+            PVLogUtil.e("LocalThumbState", "targetImage is null");
+        }
 
         if (config.isJustLoadHitPage()) {
             // 如果用户设置了 JustLoadHitImage 属性，说明在 prepareTransfer 中已经
@@ -142,7 +147,7 @@ class LocalThumbState extends TransferState {
         List<ImageView> originImageList = config.getOriginImageList();
         if (position <= originImageList.size() - 1 && originImageList.get(position) != null) {
             transImage = createTransferImage(originImageList.get(position), true);
-            loadThumbnail(config.getSourceUrlList().get(position), transImage, false);
+            loadThumbnail(config.getSourceUrl(position), transImage, false);
             transfer.addView(transImage, 1);
         }
         return transImage;

@@ -6,7 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.KeyEvent;
-import android.widget.ImageView;
+import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -111,7 +111,7 @@ public class PhotoViewer implements DialogInterface.OnShowListener,
     public PhotoViewer apply(TransferConfig config) {
         if (!shown) {
             transConfig = config;
-            com.xiaoguang.widget.viewer.OriginalViewHelper.getInstance().fillOriginImages(config);
+            OriginalViewHelper.getInstance().fillOriginImages(config);
             checkConfig();
             transLayout.apply(config);
         }
@@ -270,7 +270,7 @@ public class PhotoViewer implements DialogInterface.OnShowListener,
     }
 
     public interface OnPhotoViewerLongClickListener {
-        void onLongClick(ImageView targetImage, String imageUri, int pos);
+        void onLongClick(View currentView, String imageUri, int pos, TransferConfig config);
     }
 
 }

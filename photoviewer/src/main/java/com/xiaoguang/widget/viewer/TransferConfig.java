@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageView;
@@ -12,9 +13,14 @@ import androidx.annotation.IdRes;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xiaoguang.widget.R;
+import com.xiaoguang.widget.callback.ChangedCallback;
+import com.xiaoguang.widget.callback.CustomViewCallback;
+import com.xiaoguang.widget.entry.BaseImgUrlBean;
+import com.xiaoguang.widget.entry.VideoUrlBean;
 import com.xiaoguang.widget.loader.ImageLoader;
 import com.xiaoguang.widget.style.IIndexIndicator;
 import com.xiaoguang.widget.style.IProgressIndicator;
+import com.xiaoguang.widget.utils.PVLogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +53,7 @@ public final class TransferConfig {
     private Drawable errorDrawable;
 
     private List<ImageView> originImageList;
+    private List<BaseImgUrlBean> sourceBeanList;
     private List<String> sourceUrlList;
     private List<Uri> sourceUriList;
 
@@ -61,6 +68,14 @@ public final class TransferConfig {
     private RecyclerView recyclerView;
     private ImageView targetImageView;
     private View customView;
+    private CustomViewCallback customViewCallback;
+    private int scrollCustomViewId;
+    private CustomViewCallback scrollCustomViewCallback;
+    private int scrollImageCustomViewId;
+    private CustomViewCallback scrollImageCustomViewCallback;
+    private int scrollVideoCustomViewId;
+    private CustomViewCallback scrollVideoCustomViewCallback;
+    private ChangedCallback changedCallback;
 
     private int headerSize;
     private int footerSize;
@@ -201,7 +216,15 @@ public final class TransferConfig {
         this.originImageList = originImageList;
     }
 
-    public List<String> getSourceUrlList() {
+    public List<BaseImgUrlBean> getSourceBeanList() {
+        return sourceBeanList;
+    }
+
+    public void setSourceBeanList(List<BaseImgUrlBean> sourceBeanList) {
+        this.sourceBeanList = sourceBeanList;
+    }
+
+    private List<String> getSourceUrlList() {
         if (sourceUrlList == null || sourceUrlList.isEmpty()) {
             sourceUrlList = new ArrayList<>();
             if (sourceUriList != null && !sourceUriList.isEmpty()) {
@@ -215,6 +238,36 @@ public final class TransferConfig {
 
     public void setSourceUrlList(List<String> sourceUrlList) {
         this.sourceUrlList = sourceUrlList;
+    }
+
+    public String getSourceUrl(int position) {
+        if (null != sourceBeanList) {
+            BaseImgUrlBean bean = sourceBeanList.get(position);
+            return bean.getImageUrl();
+        } else {
+            return getSourceUrlList().get(position);
+        }
+    }
+
+    public String getVideoSourceUrl(int position) {
+        if (null != sourceBeanList) {
+            BaseImgUrlBean bean = sourceBeanList.get(position);
+            if (bean instanceof VideoUrlBean) {
+                return ((VideoUrlBean) bean).getVideoUrl();
+            } else {
+                return null;
+            }
+        } else {
+            return getSourceUrlList().get(position);
+        }
+    }
+
+    public int getSourceSize() {
+        if (null != sourceBeanList) {
+            return sourceBeanList.size();
+        } else {
+            return getSourceUrlList().size();
+        }
     }
 
     public void setSourceUriList(List<Uri> sourceUriList) {
@@ -245,11 +298,11 @@ public final class TransferConfig {
         this.imageLoader = imageLoader;
     }
 
-    public com.xiaoguang.widget.viewer.PhotoViewer.OnPhotoViewerLongClickListener getLongClickListener() {
+    public PhotoViewer.OnPhotoViewerLongClickListener getLongClickListener() {
         return longClickListener;
     }
 
-    public void setLongClickListener(com.xiaoguang.widget.viewer.PhotoViewer.OnPhotoViewerLongClickListener longClickListener) {
+    public void setLongClickListener(PhotoViewer.OnPhotoViewerLongClickListener longClickListener) {
         this.longClickListener = longClickListener;
     }
 
@@ -260,19 +313,31 @@ public final class TransferConfig {
      */
     public boolean isSourceEmpty() {
         return (sourceUrlList == null || sourceUrlList.isEmpty())
-                && (sourceUriList == null || sourceUriList.isEmpty());
+                && (sourceUriList == null || sourceUriList.isEmpty())
+                && (sourceBeanList == null || sourceBeanList.isEmpty());
     }
 
     /**
      * 判断当前 position 下的资源是不是视频
-     * FIXME 判断视频不友好
+     * FIX BUG 解决判断视频不友好
      *
      * @param position 为 -1 值，表示取 nowThumbnailIndex
      * @return true : 是视频资源
+     * 推荐使用{@link Builder#setSourceBeanList(List< BaseImgUrlBean >)}方式设置资源
      */
-    @Deprecated
     public boolean isVideoSource(int position) {
-        String sourceUrl = sourceUrlList.get(position == -1 ? nowThumbnailIndex : position);
+        int pos = position == -1 ? nowThumbnailIndex : position;
+        String sourceUrl;
+        if (null != sourceUrlList) {
+            sourceUrl = sourceUrlList.get(pos);
+        } else {
+            BaseImgUrlBean bean = sourceBeanList.get(pos);
+            return bean instanceof VideoUrlBean;
+        }
+        if (TextUtils.isEmpty(sourceUrl)) {
+            PVLogUtil.e("TransferConfig", "sourceUrl isEmpty");
+            return false;
+        }
         return VIDEO_PATTERN.matcher(sourceUrl).matches();
     }
 
@@ -324,6 +389,70 @@ public final class TransferConfig {
         this.customView = customView;
     }
 
+    public CustomViewCallback getCustomViewCallback() {
+        return customViewCallback;
+    }
+
+    public void setCustomViewCallback(CustomViewCallback customViewCallback) {
+        this.customViewCallback = customViewCallback;
+    }
+
+    public int getScrollCustomViewId() {
+        return scrollCustomViewId;
+    }
+
+    public void setScrollCustomViewId(int scrollCustomViewId) {
+        this.scrollCustomViewId = scrollCustomViewId;
+    }
+
+    public CustomViewCallback getScrollCustomViewCallback() {
+        return scrollCustomViewCallback;
+    }
+
+    public void setScrollCustomViewCallback(CustomViewCallback scrollCustomViewCallback) {
+        this.scrollCustomViewCallback = scrollCustomViewCallback;
+    }
+
+    public int getScrollImageCustomViewId() {
+        return scrollImageCustomViewId;
+    }
+
+    public void setScrollImageCustomViewId(int scrollImageCustomViewId) {
+        this.scrollImageCustomViewId = scrollImageCustomViewId;
+    }
+
+    public CustomViewCallback getScrollImageCustomViewCallback() {
+        return scrollImageCustomViewCallback;
+    }
+
+    public void setScrollImageCustomViewCallback(CustomViewCallback scrollImageCustomViewCallback) {
+        this.scrollImageCustomViewCallback = scrollImageCustomViewCallback;
+    }
+
+    public int getScrollVideoCustomViewId() {
+        return scrollVideoCustomViewId;
+    }
+
+    public void setScrollVideoCustomViewId(int scrollVideoCustomViewId) {
+        this.scrollVideoCustomViewId = scrollVideoCustomViewId;
+    }
+
+    public CustomViewCallback getScrollVideoCustomViewCallback() {
+        return scrollVideoCustomViewCallback;
+    }
+
+    public void setScrollVideoCustomViewCallback(CustomViewCallback scrollVideoCustomViewCallback) {
+        this.scrollVideoCustomViewCallback = scrollVideoCustomViewCallback;
+    }
+
+    public ChangedCallback getChangedCallback() {
+        return changedCallback;
+    }
+
+    public void setChangedCallback(ChangedCallback changedCallback) {
+        this.changedCallback = changedCallback;
+    }
+
     public int getHeaderSize() {
         return headerSize;
     }
@@ -343,12 +472,22 @@ public final class TransferConfig {
     public void destroy() {
         setImageView(null);
         setCustomView(null);
+        setCustomViewCallback(null);
+        setScrollCustomViewId(0);
+        setScrollCustomViewCallback(null);
+        setScrollImageCustomViewId(0);
+        setScrollImageCustomViewCallback(null);
+        setScrollVideoCustomViewId(0);
+        setScrollVideoCustomViewCallback(null);
+        setChangedCallback(null);
         setListView(null);
         setRecyclerView(null);
+        setTargetImageView(null);
         setProgressIndicator(null);
         setIndexIndicator(null);
         setImageLoader(null);
         setOriginImageList(null);
+        setSourceBeanList(null);
         setSourceUrlList(null);
         setSourceUriList(null);
         setMissDrawable(null);
@@ -373,6 +512,7 @@ public final class TransferConfig {
         private Drawable missDrawable;
         private Drawable errorDrawable;
 
+        private List<BaseImgUrlBean> sourceBeanList;
         private List<String> sourceUrlList;
         private List<Uri> sourceUriList;
         private List<ImageView> originImageList;
@@ -380,9 +520,20 @@ public final class TransferConfig {
         private IProgressIndicator progressIndicator;
         private IIndexIndicator indexIndicator;
         private ImageLoader imageLoader;
-        private View customView;
 
-        private @IdRes int imageId;
+        // 自定义布局
+        private View customView;
+        private CustomViewCallback customViewCallback;
+        private int scrollCustomViewId;
+        private CustomViewCallback scrollCustomViewCallback;
+        private int scrollImageCustomViewId;
+        private CustomViewCallback scrollImageCustomViewCallback;
+        private int scrollVideoCustomViewId;
+        private CustomViewCallback scrollVideoCustomViewCallback;
+        private ChangedCallback changedCallback;
+
+        private @IdRes
+        int imageId;
         private ImageView imageView;
         private AbsListView listView;
         private RecyclerView recyclerView;
@@ -391,7 +542,7 @@ public final class TransferConfig {
         private int headerSize;
         private int footerSize;
 
-        private com.xiaoguang.widget.viewer.PhotoViewer.OnPhotoViewerLongClickListener longClickListener;
+        private PhotoViewer.OnPhotoViewerLongClickListener longClickListener;
 
         /**
          * 当前缩略图在所有图片中的索引
@@ -522,6 +673,14 @@ public final class TransferConfig {
         }
 
         /**
+         * 高清图的地址实体集合
+         */
+        public Builder setSourceBeanList(List<BaseImgUrlBean> sourceBeanList) {
+            this.sourceBeanList = sourceBeanList;
+            return this;
+        }
+
+        /**
          * 高清图的地址集合
          * format: java.lang.String
          */
@@ -577,16 +736,70 @@ public final class TransferConfig {
         /**
          * 绑定 photoViewer 长按操作监听器
          */
-        public Builder setOnLongClickListener(com.xiaoguang.widget.viewer.PhotoViewer.OnPhotoViewerLongClickListener listener) {
+        public Builder setOnLongClickListener(PhotoViewer.OnPhotoViewerLongClickListener listener) {
             this.longClickListener = listener;
             return this;
         }
 
         /**
          * 在 photoViewer 视图放置用户自定义的视图
+         * 视图固定
+         *
+         * @param customView 自定义view
          */
         public Builder setCustomView(View customView) {
             this.customView = customView;
+            return this;
+        }
+
+        /**
+         * 在 photoViewer 视图放置用户自定义的视图
+         * 视图固定
+         *
+         * @param customView         自定义view
+         * @param customViewCallback 自定义view回调
+         */
+        public Builder setCustomView(View customView, CustomViewCallback customViewCallback) {
+            this.customView = customView;
+            this.customViewCallback = customViewCallback;
+            return this;
+        }
+
+        /**
+         * 在 photoViewer 视图放置用户自定义的视图
+         * 跟随图片滑动的自定义视图
+         */
+        public Builder setScrollCustomView(int scrollCustomViewId, CustomViewCallback scrollCustomViewCallback) {
+            this.scrollCustomViewId = scrollCustomViewId;
+            this.scrollCustomViewCallback = scrollCustomViewCallback;
+            return this;
+        }
+
+        /**
+         * 在 photoViewer 视图放置用户自定义的视图
+         * 跟随图片滑动的自定义视图
+         */
+        public Builder setScrollImageCustomView(int scrollImageCustomViewID, CustomViewCallback scrollImageCustomViewCallback) {
+            this.scrollImageCustomViewId = scrollImageCustomViewID;
+            this.scrollImageCustomViewCallback = scrollImageCustomViewCallback;
+            return this;
+        }
+
+        /**
+         * 在 photoViewer 视图放置用户自定义的视图
+         * 跟随视频滑动的自定义视图
+         */
+        public Builder setScrollVideoCustomView(int scrollVideoCustomViewId, CustomViewCallback scrollVideoCustomViewCallback) {
+            this.scrollVideoCustomViewId = scrollVideoCustomViewId;
+            this.scrollVideoCustomViewCallback = scrollVideoCustomViewCallback;
+            return this;
+        }
+
+        /**
+         * ViewPager 滑动改变回调
+         */
+        public Builder setChangedCallback(ChangedCallback changedCallback) {
+            this.changedCallback = changedCallback;
             return this;
         }
 
@@ -616,8 +829,10 @@ public final class TransferConfig {
 
         /**
          * 绑定 RecyclerView
+         * 用imageId在多布局计算时出错
          *
          * @param imageId item layout 中的 ImageView Resource ID
+         * @see #bindRecyclerView(RecyclerView, ImageView)
          */
         @Deprecated
         public TransferConfig bindRecyclerView(RecyclerView recyclerView, int imageId) {
@@ -687,6 +902,7 @@ public final class TransferConfig {
             config.setMissDrawable(missDrawable);
             config.setErrorDrawable(errorDrawable);
 
+            config.setSourceBeanList(sourceBeanList);
             config.setSourceUrlList(sourceUrlList);
             config.setSourceUriList(sourceUriList);
             config.setOriginImageList(originImageList);
@@ -695,6 +911,14 @@ public final class TransferConfig {
             config.setIndexIndicator(indexIndicator);
             config.setImageLoader(imageLoader);
             config.setCustomView(customView);
+            config.setCustomViewCallback(customViewCallback);
+            config.setScrollCustomViewId(scrollCustomViewId);
+            config.setScrollCustomViewCallback(scrollCustomViewCallback);
+            config.setScrollImageCustomViewId(scrollImageCustomViewId);
+            config.setScrollImageCustomViewCallback(scrollImageCustomViewCallback);
+            config.setScrollVideoCustomViewId(scrollVideoCustomViewId);
+            config.setScrollVideoCustomViewCallback(scrollVideoCustomViewCallback);
+            config.setChangedCallback(changedCallback);
 
             config.setImageId(imageId);
             config.setImageView(imageView);

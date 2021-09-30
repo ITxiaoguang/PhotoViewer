@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * FIX BUG 这里运用 recyclerView 的在长列表且多布局 没算对
- * <p>
  * Created by Vans Z on 2020/5/22.
  */
 class OriginalViewHelper {
@@ -32,7 +30,6 @@ class OriginalViewHelper {
 
     void fillOriginImages(TransferConfig config) {
         transConfig = config;
-        // FIX BUG 多布局情况下数组越界
         List<ImageView> originImageList = new ArrayList<>();
         if (transConfig.getRecyclerView() != null) {
             if (null != transConfig.getTargetImageView()) {
@@ -44,7 +41,7 @@ class OriginalViewHelper {
             fillByListView(originImageList);
         } else if (transConfig.getImageView() != null) {
             originImageList.add(transConfig.getImageView());
-            int size = transConfig.getSourceUrlList().size();
+            int size = transConfig.getSourceSize();
             for (int i = 0; i < size - 1; i++) {
                 originImageList.add(null);
             }
@@ -65,14 +62,15 @@ class OriginalViewHelper {
                     .findViewById(transConfig.getTargetImageView().getId());
             if (originImage != null) {
                 ++imageSize;
-                if (transConfig.getTargetImageView() == originImage) {// 两个view的内存也相等
+                // 两个view的内存相等
+                if (transConfig.getTargetImageView() == originImage) {
                     targetViewIndex = imageSize;
                 }
                 originImageList.add(originImage);
             }
         }
 
-        int totalCount = transConfig.getSourceUrlList().size();
+        int totalCount = transConfig.getSourceSize();
         int firstPos = transConfig.getNowThumbnailIndex() + 1 - targetViewIndex;
         int lastPos = transConfig.getNowThumbnailIndex() + 1 + (originImageList.size() - targetViewIndex);
 
@@ -81,6 +79,7 @@ class OriginalViewHelper {
         return originImageList;
     }
 
+    @Deprecated
     private void fillByRecyclerView(final List<ImageView> originImageList) {
         final int headerSize = transConfig.getHeaderSize();
         final int footerSize = transConfig.getFooterSize();
