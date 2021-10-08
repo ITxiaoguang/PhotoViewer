@@ -241,7 +241,7 @@ public class TransferChangeListener extends ViewPager.SimpleOnPageChangeListener
                         currentView = parent;
                     }
                     String sourceUrl = transConfig.getSourceUrl(position);
-                    transConfig.getLongClickListener().onLongClick(currentView, sourceUrl, position, transConfig);
+                    transConfig.getLongClickListener().onLongClick(parent, currentView, sourceUrl, position, transConfig);
                     return false;
                 }
             });

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -270,7 +271,7 @@ public class PhotoViewer implements DialogInterface.OnShowListener,
     }
 
     public interface OnPhotoViewerLongClickListener {
-        void onLongClick(View currentView, String imageUri, int pos, TransferConfig config);
+        void onLongClick(FrameLayout parent, View currentView, String imageUri, int pos, TransferConfig config);
     }
 
 }

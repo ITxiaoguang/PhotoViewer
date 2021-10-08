@@ -1264,7 +1264,11 @@ public class PhotoView extends AppCompatImageView {
     }
 
     public boolean isScrollTop() {
-        return mImgRect.top >= 0;
+        // FIX BUG 放大再还原出现不能拖拽的bug
+        // 图片缩小后mImgRect.top可能为-0.xx的bug
+        // 解决办法：提前一个像素即为置顶
+        return mImgRect.top >= -1;
+        // return mImgRect.top >= 0;
     }
 
     public void reset() {
