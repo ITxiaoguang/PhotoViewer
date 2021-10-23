@@ -33,7 +33,7 @@ transferee 可以帮助你完成从缩略视图到原视图的无缝过渡转变
 + 拆分图片、视频资源
 
 可拓展：
-+ 图片单个二维码、多个二维码扫码（请参考：https://github.com/ITxiaoguang/MLKitScanner）
++ 图片单个二维码、多个二维码扫码（请参考堪比微信扫码框架：https://github.com/ITxiaoguang/MLKitScanner ）
 
 todo:
 + 支持下载图片、视频、动态图
