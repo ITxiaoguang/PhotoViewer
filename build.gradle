@@ -54,6 +54,7 @@ project.ext {
     libSupportRecyclerview = "androidx.recyclerview:recyclerview:1.0.0"
     libExoplayer = "com.google.android.exoplayer:exoplayer:2.10.4"
     libExoExtensionRtmp = "com.google.android.exoplayer:extension-rtmp:2.10.4"
+    // 扇形百分比圆形View https://github.com/FilipPudak/ProgressPieView
     libProgresspieview = "com.github.filippudak.progresspieview:library:1.0.4"
     libGifDrawable = "pl.droidsonroids.gif:android-gif-drawable:1.2.19"
 //    libImmersionbar = "com.gyf.immersionbar:immersionbar:3.0.0"
