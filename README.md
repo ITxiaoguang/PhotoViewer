@@ -1,5 +1,5 @@
 # PhotoViewer
-PhotoViewer 一款功能超强的相册查看器。An awesome photo album viewer.持续更新中...
+PhotoViewer 一款功能超强的相册查看器。An awesome photo album viewer.
 
 ## 可以帮助你完成从缩略视图到原视图的无缝过渡转变, 优雅的浏览普通图片、长图、gif图、视频等不同格式的多媒体。
 [![](https://jitpack.io/v/ITxiaoguang/PhotoViewer.svg)](https://jitpack.io/#ITxiaoguang/PhotoViewer)
